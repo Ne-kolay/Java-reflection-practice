@@ -6,15 +6,15 @@ import java.lang.reflect.InvocationTargetException;
 public class Serializer {
 
     public static String serializeToXML(Object o) throws IllegalAccessException {
-        StringBuilder sb = new StringBuilder(); //здесь собираем xml
+        StringBuilder sb = new StringBuilder();
 
-        sb.append("<").append(o.getClass().getName()).append(">\n"); //достаём имя класса
+        sb.append("<").append(o.getClass().getName()).append(">\n");
 
-        Field[] fields = o.getClass().getFields(); //получаем все поля
+        Field[] fields = o.getClass().getFields();
         for (Field field : fields) {
-            field.setAccessible(true); //получаем доступ к полю на случай, если оно не public
+            field.setAccessible(true);
             sb.append("    <").append(field.getName()).append(">")
-                    .append(field.get(o)) //получаем значение поля в переданном объекте
+                    .append(field.get(o))
                     .append("</").append(field.getName()).append(">\n");
         }
 
@@ -22,7 +22,7 @@ public class Serializer {
 
         System.out.println("Object of type {" + o.getClass().getSimpleName() + "} " +
                 "is " + "successfully serialised to XML: \n" + sb.toString());
-        return sb.toString(); //отдаём собранный xml
+        return sb.toString();
     }
 
 
@@ -40,7 +40,7 @@ public class Serializer {
                 int openIndex = xml.indexOf(openTag);
                 int closeIndex = xml.indexOf(closeTag);
 
-                //проверяем наличие открываеющего и закрывающего тега
+
                 if (openIndex == -1 || closeIndex == -1) {
                     continue;
                 }
@@ -57,7 +57,7 @@ public class Serializer {
             return instance;
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            throw new RuntimeException("Ошибка десериализации", e);
+            throw new RuntimeException("Deserialization error: ", e);
         }
     }
 
@@ -78,7 +78,7 @@ public class Serializer {
         } else if (type == byte.class || type == Byte.class) {
             return Byte.parseByte(value);
         } else if (type == char.class || type == Character.class) {
-            return value.charAt(0); // предполагаем, что в строке один символ
+            return value.charAt(0);
         } else if (type == String.class) {
             return value;
         }
